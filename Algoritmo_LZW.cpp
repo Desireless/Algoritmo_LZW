@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <vector>
 #define MAX 100
 
 using namespace std;
@@ -20,6 +21,23 @@ bool existe(string ck, string diccionario[MAX], int n) {
     return 0;
 }
 
+void resultado(vector<string> tutson, string diccionario[MAX], int n) {
+    string comprimido = "";
+    cout << "FRASE COMPRIMIDA: ";
+
+    for (string tut : tutson) {
+        for (int i = 0; i < n; i++)
+        {
+            if (tut == diccionario[i]) {
+                comprimido += i;
+                cout << i;
+            }
+        }
+    }
+
+    //cout << comprimido;
+}
+
 void lzw(string frase, string diccionario[MAX], int n) {
 
     cout << "ALGORITMO LZW" << endl;
@@ -28,12 +46,14 @@ void lzw(string frase, string diccionario[MAX], int n) {
     string c = string(1,frase.at(0));
     string k = "";
     string ck = "";
+    vector<string> res; // vector resultado a convertir
 
     for (int i = 0; i < ( frase.length() - 1 ); i++)
     {
+        res.push_back(c);
+        
 
-
-
+        // Algoritmo
         k = string(1, frase.at(i + 1) );
         ck += c;
         ck += k;
@@ -49,7 +69,7 @@ void lzw(string frase, string diccionario[MAX], int n) {
         ck = "";
     }
 
-
+    resultado(res, diccionario, n);
 }
 
 
