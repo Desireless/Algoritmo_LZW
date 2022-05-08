@@ -1,15 +1,14 @@
-// Algoritmo_LZW.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include <vector>
 #define MAX 100
 
 using namespace std;
 
-// diccionario MAX : 100;
-// n : cantidad real del diccionario
-// frase : palabras a comprimir
+/*
+
+Dada una frase y un diccionario, devuelve la frase codificada en codigos.
+
+*/
 
 bool existe(string ck, string diccionario[MAX], int n) {
     for (int i = 0; i < n; i++)
@@ -22,48 +21,56 @@ bool existe(string ck, string diccionario[MAX], int n) {
 }
 
 void resultado(vector<string> tutson, string diccionario[MAX], int n) {
-    string comprimido = "";
     cout << "FRASE COMPRIMIDA: ";
-
     for (string tut : tutson) {
         for (int i = 0; i < n; i++)
         {
             if (tut == diccionario[i]) {
-                comprimido += i;
                 cout << i;
             }
         }
     }
 
-    //cout << comprimido;
 }
 
 void lzw(string frase, string diccionario[MAX], int n) {
-
+    /*
+        c : caracter actual
+        k : caracter siguiente
+        ck : caracter actual concatenado con el siguiente
+        res : vector resultante de caracteres a comprimir
+    */
     cout << "ALGORITMO LZW" << endl;
     cout << "FRASE: " + frase << endl;
-
+    int siguiente = 1;
     string c = string(1,frase.at(0));
     string k = "";
     string ck = "";
-    vector<string> res; // vector resultado a convertir
+    vector<string> res;
 
-    for (int i = 0; i < ( frase.length() - 1 ); i++)
+
+    for (int i = 0; i < frase.length(); i++)
     {
-        res.push_back(c);
-        
+        // Si siguiente no supera el tamano de frase
+        if (siguiente < frase.length()) {
+            k = string(1, frase.at(siguiente)); // siguiente caracter
+            ck += c;
+            ck += k;
 
-        // Algoritmo
-        k = string(1, frase.at(i + 1) );
-        ck += c;
-        ck += k;
-        if ( existe(ck, diccionario, n) ) {
-            c = ck;
+            if (existe(ck, diccionario, n)) { // Existe ck en Diccionario ?
+                c = ck;
+                siguiente++;
+            }
+            else {
+                diccionario[n] = ck; // guarda ck en diccionario
+                n++;
+                res.push_back(c); // guarda en vector de caracteres
+                c = k;
+                siguiente++;
+            }
         }
-        else {
-            diccionario[n] = ck;
-            n++;
-            c = k;
+        else { // caso de ultimo caracter
+            res.push_back(c);
         }
 
         ck = "";
